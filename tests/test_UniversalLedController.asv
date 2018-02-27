@@ -1,0 +1,11 @@
+cDir = fileparts(mfilename('fullpath'));
+addpath(fullfile(cDir, '..', 'src'));
+
+comm = mightex.UniversalLedController();
+comm.init();
+st = comm.getChannelData(1)
+st = comm.getChannelData(2)
+comm.setWorkingMode(3,mightex.Universal.cWORK
+comm.setNormalModeCurrent(3, 400);
+st = comm.getChannelData(3)
+st = comm.getChannelData(4)
