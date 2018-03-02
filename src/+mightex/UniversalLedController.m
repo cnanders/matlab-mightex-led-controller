@@ -190,7 +190,7 @@ classdef UniversalLedController < handle
         function setDefaultPathOfDllAndHeader(this)
             
             cDir = fileparts(mfilename('fullpath'));
-            cDirSdk = fullfile(cDir, '..', 'sdk');
+            cDirSdk = fullfile(cDir, '..', '..', 'sdk');
             cArch = computer('arch');
             
             switch cArch
@@ -229,6 +229,15 @@ classdef UniversalLedController < handle
             else
                 this.msg('device opened successfully.');
             end
+        end
+        
+        function l = hasProp(this, c)
+            
+            l = false;
+            if ~isempty(findprop(this, c))
+                l = true;
+            end
+            
         end
     end
     
