@@ -164,9 +164,10 @@ classdef UniversalLedController < handle
             
         end
         
-        
-        
-        
+        function disconnect(this)
+            % TBD
+        end
+                
     end
     
     methods (Access = protected)
