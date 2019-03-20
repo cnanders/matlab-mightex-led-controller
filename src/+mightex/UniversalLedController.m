@@ -53,9 +53,24 @@ classdef UniversalLedController < handle
             % Detect the number of Mightex Devices
             
             this.detectAvailableDevices()
-            this.openDevice();       
+            this.openDevice(); 
+            this.echoOff();
             
         end
+        
+        function echoOff(this)
+            
+            cCmd = 'ECHOOFF';
+            
+            u8Response = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverSendCommand', ...
+                this.hDevice, ...
+                cCmd ...
+            );
+            
+        end
+        
         
         
         
@@ -103,6 +118,55 @@ classdef UniversalLedController < handle
             this.sendCmd(cCmd);
         end
         
+        function c = getDeviceInfo(this)
+            
+            
+            c = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverSendCommand', ...
+                this.hDevice, ...
+                'DEVICEINFO' ...
+            );
+            
+            
+        end
+        
+        function d = getCurrentWorkingMode(this, u8Ch)
+            
+            cCmd = sprintf(...
+                '?MODE %1.0d', ...
+                u8Ch ...
+            );
+            cResponse = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverSendCommand', ...
+                this.hDevice, ...
+                cCmd ...
+            )
+                    
+            
+        end
+        
+        
+        function [dCurrentMax, dCurrentSet] = getNormalModeParameters(this, u8Ch)
+            
+            cCmd = sprintf(...
+                '?CURRENT %1.0d', ...
+                u8Ch ...
+            );
+            cResponse = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverSendCommand', ...
+                this.hDevice, ...
+                cCmd ...
+            )
+            
+            dCurrentMax = 0;
+            dCurrentSet = 0;
+            
+        end
+        
+        
         
         function st = getChannelData(this, u8Ch)
             
@@ -120,7 +184,7 @@ classdef UniversalLedController < handle
             % Make sure to read the docs on libpointer if you are not
             % familiar with it.
 
-            ptrMode = libpointer('int32Ptr', 0);
+            ptrMode = libpointer('int32Ptr', 1);
             %fprintf('Output of get(ptrMode) ******\n');
             %get(ptrMode)
 
@@ -143,6 +207,7 @@ classdef UniversalLedController < handle
             %fprintf('Output of get(sc) ***** \n');
             %get(ptrTLedChannelData)
 
+            dTic = tic;
             u8Out = calllib(...
                 'Mightex_LEDDriver_SDK', ...
                 'MTUSB_LEDDriverGetCurrentPara', ...
@@ -151,6 +216,8 @@ classdef UniversalLedController < handle
                 ptrTLedChannelData, ...
                 ptrMode ...
             );
+            dToc = toc(dTic);
+            fprintf('+mightex/UniversalLedController calllib %1.1f ms\n', dToc * 1000);
             
             st.Normal_CurrentMax = ptrTLedChannelData.Normal_CurrentMax;
             st.Normal_CurrentSet = ptrTLedChannelData.Normal_CurrentSet;
@@ -213,7 +280,10 @@ classdef UniversalLedController < handle
         
         function detectAvailableDevices(this)
             
-            dNum = calllib('Mightex_LEDDriver_SDK', 'MTUSB_LEDDriverInitDevices');
+            dNum = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverInitDevices' ...
+            );
             if(dNum == 0)
                 this.msg('no devices detected.');
                 return;
@@ -223,7 +293,11 @@ classdef UniversalLedController < handle
         end
         
         function openDevice(this)
-            this.hDevice = calllib('Mightex_LEDDriver_SDK', 'MTUSB_LEDDriverOpenDevice', this.u8DeviceIndex);
+            this.hDevice = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverOpenDevice', ...
+                this.u8DeviceIndex ...
+            );
             if this.hDevice == -1
                 this.msg('error opening device.');
                 return;
