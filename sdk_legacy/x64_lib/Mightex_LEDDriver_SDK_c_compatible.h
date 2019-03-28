@@ -74,5 +74,3 @@ SDK_API MTUSB_LEDDriverRestoreDefault( int DevHandle );
 SDK_API MTUSB_LEDDriverGetLoadVoltage( int DevHandle, int Channel );
 SDK_API MTUSB_LEDDriverGetCurrentPara( int DevHandle, int Channel,TLedChannelData *LedChannelDataPtr,int *Mode );
 SDK_API MTUSB_LEDDriverSendCommand( int DevHandle, char *CommandString );
-SDK_API MTUSB_LEDDriverGetChannelNormalIMAX(int DevHandle, int Channel);
-SDK_API MTUSB_LEDDriverGetChannelNormalISET(int DevHandle, int Channel);

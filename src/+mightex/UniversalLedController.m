@@ -147,8 +147,33 @@ classdef UniversalLedController < handle
             
         end
         
+        % Returns the normal mode Imax value of a channell 
+        % @param {uint8 1x1} u8Ch - channel e.g., 1, 2, 3, 4
+        % @return {double 1x1} 
+        function d = getCurrentMaxNormalMode(this, u8Ch)
+             d = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverGetChannelNormalIMAX', ...
+                this.hDevice, ...
+                uint8(u8Ch) ...
+            );
+        end
         
+        % Returns the normal mode current value of a channell 
+        % @param {uint8 1x1} u8Ch - channel e.g., 1, 2, 3, 4
+        % @return {double 1x1} 
+        function d = getCurrentNormalMode(this, u8Ch)
+             d = calllib(...
+                'Mightex_LEDDriver_SDK', ...
+                'MTUSB_LEDDriverGetChannelNormalISET', ...
+                this.hDevice, ...
+                uint8(u8Ch) ...
+            );
+        end
+        
+        %{
         function [dCurrentMax, dCurrentSet] = getNormalModeParameters(this, u8Ch)
+            
             
             cCmd = sprintf(...
                 '?CURRENT %1.0d', ...
@@ -165,6 +190,7 @@ classdef UniversalLedController < handle
             dCurrentSet = 0;
             
         end
+        %}
         
         
         

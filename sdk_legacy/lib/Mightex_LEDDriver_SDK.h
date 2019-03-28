@@ -7,17 +7,9 @@
 typedef int SDK_RETURN_CODE;
 
 #ifdef SDK_EXPORTS
-    #ifdef __cplusplus
-        #define SDK_API extern "C" __declspec(dllexport) SDK_RETURN_CODE _cdecl
-    #else
-        #define SDK_API __declspec(dllexport) SDK_RETURN_CODE _cdecl
-    #endif
+#define SDK_API extern "C" __declspec(dllexport) SDK_RETURN_CODE _cdecl
 #else
-    #ifdef __cplusplus
-        #define SDK_API extern "C" __declspec(dllimport) SDK_RETURN_CODE _cdecl
-    #else
-        #define SDK_API __declspec(dllimport) SDK_RETURN_CODE _cdecl
-    #endif
+#define SDK_API extern "C" __declspec(dllimport) SDK_RETURN_CODE _cdecl
 #endif
 
 #define  MAX_PROFILE_ITEM     128
@@ -39,7 +31,6 @@ typedef int SDK_RETURN_CODE;
 #define MODULE_FV	9
 #define MODULE_XA	10
 #define MODULE_XV	11
-#define MODULE_QA	12
 
 #pragma pack(1)
 typedef struct {
@@ -72,7 +63,4 @@ SDK_API MTUSB_LEDDriverResetDevice( int DevHandle );
 SDK_API MTUSB_LEDDriverStorePara( int DevHandle );
 SDK_API MTUSB_LEDDriverRestoreDefault( int DevHandle );
 SDK_API MTUSB_LEDDriverGetLoadVoltage( int DevHandle, int Channel );
-SDK_API MTUSB_LEDDriverGetCurrentPara( int DevHandle, int Channel,TLedChannelData *LedChannelDataPtr,int *Mode );
 SDK_API MTUSB_LEDDriverSendCommand( int DevHandle, char *CommandString );
-SDK_API MTUSB_LEDDriverGetChannelNormalIMAX(int DevHandle, int Channel);
-SDK_API MTUSB_LEDDriverGetChannelNormalISET(int DevHandle, int Channel);
