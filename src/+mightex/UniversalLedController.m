@@ -16,6 +16,10 @@ classdef UniversalLedController < handle
         u8DeviceIndex = uint8(0)
         hDevice % handle of the device
         
+        % Storage for cached values of current.  When NaN, need to update
+        % cache
+        dCurrentCache = nan(1, 4);
+        
     end
     
     methods
@@ -98,6 +102,8 @@ classdef UniversalLedController < handle
         % @param {double 1x1} dCurrentMax - max current in mA [0 - 1000]
         % @param {double 1x1} dCurrent - working current in mA [0 - dCurrentMax]
         function setNormalModeCurrentMaxAndCurrent(this, u8Ch, dCurrentMax, dCurrent)
+           
+            this.dCurrentCache(u8Ch) = NaN; % bust cache
             cCmd = sprintf(...
                 'NORMAL %1.0f %1.0f %1.0f', ...
                 u8Ch, ...
@@ -110,6 +116,8 @@ classdef UniversalLedController < handle
         % @param {uint8 1x1} u8Ch - channel e.g., 1, 2, 3, 4
         % @param {double 1x1} dCurrent - current in mA [0 - 1000]
         function setNormalModeCurrent(this, u8Ch, dCurrent)
+            
+            this.dCurrentCache(u8Ch) = NaN; % bust cache
             cCmd = sprintf(...
                 'CURRENT %1.0f %1.0f', ...
                 u8Ch, ...
@@ -159,6 +167,23 @@ classdef UniversalLedController < handle
             );
         end
         
+        
+        function d = getCurrentNormalModeCached(this, u8Ch)
+            
+            % Update cache if necessary
+            if isnan(this.dCurrentCache(u8Ch))
+                this.dCurrentCache(u8Ch) = this.getCurrentNormalMode(u8Ch);
+                fprintf(...
+                    'mightex.UniversalLedController updating current cache of channel %d to %1.3f\n', ...
+                    u8Ch, ...
+                    this.dCurrentCache(u8Ch) ...
+                );
+                    
+            end
+            
+            d = this.dCurrentCache(u8Ch);
+            
+        end
         % Returns the normal mode current value of a channell 
         % @param {uint8 1x1} u8Ch - channel e.g., 1, 2, 3, 4
         % @return {double 1x1} 
