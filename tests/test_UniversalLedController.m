@@ -8,17 +8,8 @@ comm.init();
 
 tic
 comm.getCurrentMaxNormalMode(1)
-toc
-
-tic
 comm.getCurrentMaxNormalMode(2)
-toc
-
-tic
 comm.getCurrentMaxNormalMode(3)
-toc
-
-tic
 comm.getCurrentMaxNormalMode(4)
 toc
 
@@ -32,7 +23,7 @@ toc
 
 % comm.getNormalModeParameters(2)
 
-
+%{
 tic
 comm.setNormalModeCurrentMaxAndCurrent(1, 950, 850);
 comm.setNormalModeCurrentMaxAndCurrent(2, 960, 860);
@@ -49,3 +40,4 @@ st = comm.getChannelData(1)
 st = comm.getChannelData(2)
 st = comm.getChannelData(3)
 st = comm.getChannelData(4)
+%}
