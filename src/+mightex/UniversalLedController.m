@@ -139,7 +139,7 @@ classdef UniversalLedController < handle
             
         end
         
-        function d = getCurrentWorkingMode(this, u8Ch)
+        function d = getWorkingMode(this, u8Ch)
             
             cCmd = sprintf(...
                 '?MODE %1.0d', ...
